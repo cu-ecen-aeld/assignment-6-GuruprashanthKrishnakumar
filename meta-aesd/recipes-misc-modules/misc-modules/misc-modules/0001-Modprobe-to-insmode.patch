@@ -1,0 +1,52 @@
+From 72692e4e491e7997baa37a4e3da7924dfce6c33c Mon Sep 17 00:00:00 2001
+From: GuruprashanthKrishnakumar <gukr5411@colorado.edu>
+Date: Sun, 16 Oct 2022 16:59:37 -0600
+Subject: [PATCH] Modprobe to insmode
+
+---
+ Makefile                 | 6 ++----
+ misc-modules/module_load | 2 +-
+ scull/scull_load         | 2 +-
+ 3 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7b08c49..c0f2d6b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,6 @@
+ 
+-SUBDIRS =  misc-progs misc-modules \
+-           skull scull scullc scullp lddbus sculld scullv shortprint simple tty \
+-	   pci usb\
+-	   sbull snull short
++SUBDIRS =  misc-modules \
++           scull
+ 
+ all: subdirs
+ 
+diff --git a/misc-modules/module_load b/misc-modules/module_load
+index f972759..f2934a5 100755
+--- a/misc-modules/module_load
++++ b/misc-modules/module_load
+@@ -22,7 +22,7 @@ else
+ fi
+ 
+ echo "Load our module, exit on failure"
+-modprobe $module.ko $* || exit 1
++insmod /lib/modules/5.15.68-yocto-standard/$module.ko $* || exit 1
+ echo "Get the major number (allocated with allocate_chrdev_region) from /proc/devices"
+ major=$(awk "\$2==\"$module\" {print \$1}" /proc/devices)
+ if [ ! -z ${major} ]; then
+diff --git a/scull/scull_load b/scull/scull_load
+index eaec1e8..bf285be 100755
+--- a/scull/scull_load
++++ b/scull/scull_load
+@@ -13,7 +13,7 @@ fi
+ 
+ # invoke insmod with all arguments we got
+ # and use a pathname, as insmod doesn't look in . by default
+-modprobe $module.ko $* || exit 1
++insmod /lib/modules/5.15.68-yocto-standard/$module.ko $* || exit 1
+ 
+ # retrieve major number
+ major=$(awk "\$2==\"$module\" {print \$1}" /proc/devices)

@@ -25,7 +25,6 @@ fi
 
 bitbake-layers show-layers | grep "meta-aesd" > /dev/null
 layer_info=$?
-
 if [ $layer_info -ne 0 ];then
 	echo "Adding meta-aesd layer"
 	bitbake-layers add-layer ../meta-aesd
